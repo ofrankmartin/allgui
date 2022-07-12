@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+# vscode files
+.vscode
+
+# QtCreator files
+*.user
+
+# build directories
+build
+build_*
