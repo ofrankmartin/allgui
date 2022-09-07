@@ -25,5 +25,6 @@ Factory::Factory(const string &backend)
 Factory::~Factory() {}
 
 shared_ptr<Director> Factory::getDirector() { return pimpl->getDirector(); }
+Window* Factory::createWindow() { return pimpl->createWindow(); }
 
 } // namespace AG

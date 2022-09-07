@@ -1,6 +1,10 @@
 #include "WindowSDL2.h"
 
+#include <iostream>
+
 #include <SDL2/SDL.h>
+
+#include <Errors.h>
 
 #include <WindowImpl.h>
 
@@ -22,19 +26,12 @@ public:
     std::string title() const override;
     void setTitle(const std::string &title) override;
 
-    void initializeWindow();
+    int initialize(const std::string &title, int width, int height) override;
+
+    int draw() override;
 };
 
-WindowSDL2::WindowSDL2(const std::string &title, int width, int height)
-    : Window()
-{
-    this->pimpl.reset(new WindowImplSDL2());
-    WindowImplSDL2 *pimpl = dynamic_cast<WindowImplSDL2 *>(this->pimpl.get());
-
-    pimpl->m_sdlWindow = SDL_CreateWindow(
-        title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width,
-        height, SDL_WINDOW_SHOWN);
-}
+WindowSDL2::WindowSDL2() : Window() { this->pimpl.reset(new WindowImplSDL2()); }
 
 WindowSDL2::~WindowSDL2() {}
 
@@ -46,11 +43,43 @@ SDL_Window *WindowSDL2::window() const
 // Implementation class
 WindowImplSDL2::~WindowImplSDL2() { SDL_DestroyWindow(m_sdlWindow); }
 
-void WindowImplSDL2::initializeWindow()
+int WindowImplSDL2::initialize(const std::string &title, int width, int height)
 {
-    m_sdlWindow = SDL_CreateWindow(
-        this->title().c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        this->width(), this->height(), SDL_WINDOW_SHOWN);
+    m_sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED,
+                                   SDL_WINDOWPOS_UNDEFINED, width, height,
+                                   SDL_WINDOW_SHOWN);
+
+    if (m_sdlWindow) {
+        return ERROR_SUCCESS;
+    } else {
+        std::cerr << "could not create window: " << SDL_GetError() << std::endl;
+        return ERROR_UNKNOWN;
+    }
+}
+
+int WindowImplSDL2::draw()
+{
+    if (m_sdlWindow == nullptr) {
+        std::cerr << "No SDL window available." << std::endl;
+        return ERROR_UNKNOWN;
+    }
+
+    SDL_Surface *screenSurface = SDL_GetWindowSurface(m_sdlWindow);
+    SDL_Color colors[5] = {
+        {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0x00, 0x00, 0xFF},
+        {0x00, 0xFF, 0x00, 0xFF}, {0x00, 0x00, 0xFF, 0xFF},
+        {0x00, 0x00, 0x00, 0xFF},
+    };
+
+    Uint32 ticks = SDL_GetTicks();
+    int idx = (ticks / 1000) % 5;
+
+    SDL_FillRect(screenSurface, NULL,
+                 SDL_MapRGB(screenSurface->format, colors[idx].r, colors[idx].g,
+                            colors[idx].b));
+    SDL_UpdateWindowSurface(m_sdlWindow);
+
+    return ERROR_SUCCESS;
 }
 
 int WindowImplSDL2::width() const

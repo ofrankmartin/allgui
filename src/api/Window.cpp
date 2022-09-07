@@ -3,6 +3,7 @@
 #include "WindowImpl.h"
 
 namespace AG {
+
 Window::Window() {}
 
 Window::~Window() {}
@@ -18,4 +19,12 @@ void Window::setHeight(int height) { pimpl->setHeight(height); }
 std::string Window::title() const { return pimpl->title(); }
 
 void Window::setTitle(const std::string &title) { pimpl->setTitle(title); }
+
+int Window::initialize(const std::string &title, int width, int height)
+{
+    return pimpl->initialize(title, width, height);
+}
+
+int Window::draw() { return pimpl->draw(); }
+
 } // namespace AG

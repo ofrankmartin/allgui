@@ -1,5 +1,7 @@
 #include "Director.h"
 
+#include "DirectorImpl.h"
+
 #include <Errors.h>
 
 namespace AG {
@@ -22,5 +24,20 @@ int Director::addEventListener(const string &trigger, EventCallback callback)
 }
 
 Window *Director::activeWindow() const { return pimpl->activeWindow().get(); }
+
+int Director::addWindow(const std::string &idx, Window *const window)
+{
+    return pimpl->addWindow(idx, window);
+}
+
+int Director::setActiveWindow(const std::string &idx)
+{
+    return pimpl->setActiveWindow(idx);
+}
+
+int Director::removeWindow(const std::string &idx)
+{
+    return pimpl->removeWindow(idx);
+}
 
 } // namespace AG

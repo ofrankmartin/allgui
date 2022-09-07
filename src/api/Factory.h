@@ -7,6 +7,7 @@
 namespace AG {
 
 class Director;
+class Window;
 class FactoryImpl;
 
 class Factory {
@@ -15,6 +16,7 @@ public:
     ~Factory();
 
     std::shared_ptr<Director> getDirector();
+    Window* createWindow();
 
 private:
     std::unique_ptr<FactoryImpl> pimpl;

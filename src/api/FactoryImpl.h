@@ -2,15 +2,19 @@
 #define __SUBFACTORY_H__
 
 #include <memory>
-#include "Director.h"
 
 namespace AG {
+
+class Director;
+class Window;
+
 class FactoryImpl {
 public:
     FactoryImpl(){};
     virtual ~FactoryImpl(){};
 
     virtual std::shared_ptr<Director> getDirector() = 0;
+    virtual Window* createWindow() = 0;
 };
 } // namespace AG
 

@@ -9,7 +9,7 @@ namespace AG {
 
 class WindowSDL2 : public Window {
 public:
-    WindowSDL2(const std::string &title, int width, int height);
+    WindowSDL2();
     ~WindowSDL2();
 
     SDL_Window *window() const;

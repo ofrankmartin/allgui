@@ -29,10 +29,6 @@ class DirectorImplSDL2 : public DirectorImpl {
 public:
     DirectorImplSDL2() : readyToFinish(false) {}
 
-    uint m_screenWidth = 800;
-    uint m_screenHeight = 600;
-    string m_windowName = "SDL Application";
-
     atomic<bool> readyToFinish;
     shared_ptr<WindowSDL2> m_activeWindow;
     unordered_map<string, shared_ptr<WindowSDL2>> m_windows;
@@ -61,25 +57,14 @@ int DirectorImplSDL2::initialize()
         return ERROR_UNKNOWN;
     }
 
-    WindowSDL2 *newWindow = new WindowSDL2("SDL2 Application", 800, 600);
-
-    if (newWindow == NULL) {
-        cerr << "could not create window: " << SDL_GetError() << endl;
-        return ERROR_UNKNOWN;
-    }
-
-    addWindow("main", newWindow);
-
     return ERROR_SUCCESS;
 }
 
 int DirectorImplSDL2::finalize()
 {
-    int retval = ERROR_SUCCESS;
-
     readyToFinish.store(true);
 
-    return retval;
+    return ERROR_SUCCESS;
 }
 
 int DirectorImplSDL2::run()
@@ -92,6 +77,7 @@ int DirectorImplSDL2::run()
 
         if ((rc = draw())) {
             cerr << "Failed drawing frame" << endl;
+            finalize();
         }
 
     } while (!readyToFinish.load());
@@ -120,29 +106,11 @@ int DirectorImplSDL2::draw()
         window = dynamic_cast<WindowSDL2 *>(activeWindowPtr.get());
     }
 
-    SDL_Window *sdlWindow = nullptr;
     if (window) {
-        sdlWindow = window->window();
+        return window->draw();
+    } else {
+        return ERROR_UNKNOWN;
     }
-
-    if (sdlWindow) {
-        SDL_Surface *screenSurface = SDL_GetWindowSurface(sdlWindow);
-        SDL_Color colors[5] = {
-            {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0x00, 0x00, 0xFF},
-            {0x00, 0xFF, 0x00, 0xFF}, {0x00, 0x00, 0xFF, 0xFF},
-            {0x00, 0x00, 0x00, 0xFF},
-        };
-
-        Uint32 ticks = SDL_GetTicks();
-        int idx = (ticks / 1000) % 5;
-
-        SDL_FillRect(screenSurface, NULL,
-                     SDL_MapRGB(screenSurface->format, colors[idx].r,
-                                colors[idx].g, colors[idx].b));
-        SDL_UpdateWindowSurface(sdlWindow);
-    }
-
-    return ERROR_SUCCESS;
 }
 
 int DirectorImplSDL2::eventHandler()

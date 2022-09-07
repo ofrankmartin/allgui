@@ -7,14 +7,13 @@
 
 namespace AG {
 
-class Director;
-
 class FactoryImplSDL2 : public FactoryImpl {
 public:
     FactoryImplSDL2() {}
     ~FactoryImplSDL2() {}
 
     std::shared_ptr<Director> getDirector() override;
+    Window* createWindow() override;
 
 private:
     std::shared_ptr<Director> m_director;

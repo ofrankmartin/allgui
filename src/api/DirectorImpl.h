@@ -6,9 +6,9 @@
 #include <string>
 #include <unordered_map>
 
-namespace AG {
+#include "Events.h"
 
-typedef void (*EventCallback)(void);
+namespace AG {
 
 class Window;
 
@@ -25,8 +25,9 @@ public:
     int addEventListener(const std::string &trigger, EventCallback callback);
     std::shared_ptr<Window> activeWindow() const;
 
-    void addWindow(const std::string &idx, Window *const window);
-    void setActiveWindow(const std::string &idx);
+    int addWindow(const std::string &idx, Window *const window);
+    int setActiveWindow(const std::string &idx);
+    int removeWindow(const std::string &idx);
 
 protected:
     std::unordered_map<std::string, std::list<EventCallback>> m_eventListeners;
