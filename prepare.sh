@@ -5,7 +5,6 @@ if [[ $(id -u) > 0 ]]; then
     exit 1
 fi
 
-# Install dependencies for Ubuntu 22.04 / Mint 21
 function install_pkg {
     NEW_PKGS=()
     INSTALLED_PKGS=()
@@ -24,6 +23,7 @@ function install_pkg {
     fi
 }
 
+# Install dependencies for Ubuntu 22.04 / Mint 21
 install_pkg \
     build-essential \
     cmake \
