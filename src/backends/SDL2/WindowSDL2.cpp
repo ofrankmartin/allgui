@@ -10,12 +10,16 @@
 
 namespace AG {
 
+using std::cerr;
+using std::endl;
 using std::string;
 
 class WindowImplSDL2 : public WindowImpl {
 public:
     ~WindowImplSDL2();
     SDL_Window *m_sdlWindow = nullptr;
+    SDL_Renderer *m_renderer = nullptr;
+    SDL_Texture *m_windowTexture = nullptr;
 
     int width() const override;
     void setWidth(int width) override;
@@ -41,30 +45,53 @@ SDL_Window *WindowSDL2::window() const
 }
 
 // Implementation class
-WindowImplSDL2::~WindowImplSDL2() { SDL_DestroyWindow(m_sdlWindow); }
+WindowImplSDL2::~WindowImplSDL2()
+{
+    auto initSubsystems = SDL_WasInit(SDL_INIT_VIDEO);
+    if ((initSubsystems & SDL_INIT_VIDEO) == SDL_INIT_VIDEO) {
+        if (m_renderer) {
+            SDL_DestroyRenderer(m_renderer);
+        }
+        if (m_sdlWindow) {
+            SDL_DestroyWindow(m_sdlWindow);
+        }
+    }
+}
 
 int WindowImplSDL2::initialize(const std::string &title, int width, int height)
 {
     m_sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED,
                                    SDL_WINDOWPOS_UNDEFINED, width, height,
                                    SDL_WINDOW_SHOWN);
-
-    if (m_sdlWindow) {
-        return ERROR_SUCCESS;
-    } else {
-        std::cerr << "could not create window: " << SDL_GetError() << std::endl;
-        return ERROR_UNKNOWN;
+    if (m_sdlWindow == nullptr) {
+        cerr << "could not create window: " << SDL_GetError() << endl;
+        return RETURN_ERROR_UNKNOWN;
     }
+
+    m_renderer = SDL_CreateRenderer(m_sdlWindow, -1, SDL_RENDERER_ACCELERATED);
+    if (m_renderer == nullptr) {
+        cerr << "could not create renderer: " << SDL_GetError() << endl;
+        return RETURN_ERROR_UNKNOWN;
+    }
+
+    m_windowTexture =
+        SDL_CreateTexture(m_renderer, SDL_GetWindowPixelFormat(m_sdlWindow),
+                          SDL_TEXTUREACCESS_TARGET, width, height);
+    if (m_windowTexture == nullptr) {
+        cerr << "could not create texture: " << SDL_GetError() << endl;
+        return RETURN_ERROR_UNKNOWN;
+    }
+
+    return RETURN_SUCCESS;
 }
 
 int WindowImplSDL2::draw()
 {
     if (m_sdlWindow == nullptr) {
-        std::cerr << "No SDL window available." << std::endl;
-        return ERROR_UNKNOWN;
+        cerr << "No SDL window available." << endl;
+        return RETURN_ERROR_UNKNOWN;
     }
 
-    SDL_Surface *screenSurface = SDL_GetWindowSurface(m_sdlWindow);
     SDL_Color colors[5] = {
         {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0x00, 0x00, 0xFF},
         {0x00, 0xFF, 0x00, 0xFF}, {0x00, 0x00, 0xFF, 0xFF},
@@ -74,12 +101,15 @@ int WindowImplSDL2::draw()
     Uint32 ticks = SDL_GetTicks();
     int idx = (ticks / 1000) % 5;
 
-    SDL_FillRect(screenSurface, NULL,
-                 SDL_MapRGB(screenSurface->format, colors[idx].r, colors[idx].g,
-                            colors[idx].b));
-    SDL_UpdateWindowSurface(m_sdlWindow);
+    SDL_SetRenderTarget(m_renderer, m_windowTexture);
+    SDL_SetRenderDrawColor(m_renderer, colors[idx].r, colors[idx].g,
+                           colors[idx].b, colors[idx].a);
+    SDL_RenderClear(m_renderer);
+    SDL_SetRenderTarget(m_renderer, nullptr);
+    SDL_RenderCopy(m_renderer, m_windowTexture, nullptr, nullptr);
+    SDL_RenderPresent(m_renderer);
 
-    return ERROR_SUCCESS;
+    return RETURN_SUCCESS;
 }
 
 int WindowImplSDL2::width() const

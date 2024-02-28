@@ -23,7 +23,7 @@ public:
     virtual int run() = 0;
 
     int addEventListener(const std::string &trigger, EventCallback callback);
-    std::shared_ptr<Window> activeWindow() const;
+    Window *activeWindow() const;
 
     int addWindow(const std::string &idx, Window *const window);
     int setActiveWindow(const std::string &idx);
@@ -31,8 +31,8 @@ public:
 
 protected:
     std::unordered_map<std::string, std::list<EventCallback>> m_eventListeners;
-    std::unordered_map<std::string, std::shared_ptr<Window>> m_windows;
-    std::shared_ptr<Window> m_activeWindow;
+    std::unordered_map<std::string, std::unique_ptr<Window>> m_windows;
+    Window* m_activeWindow;
 };
 
 } // namespace AG

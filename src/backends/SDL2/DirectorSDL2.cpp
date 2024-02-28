@@ -30,8 +30,6 @@ public:
     DirectorImplSDL2() : readyToFinish(false) {}
 
     atomic<bool> readyToFinish;
-    shared_ptr<WindowSDL2> m_activeWindow;
-    unordered_map<string, shared_ptr<WindowSDL2>> m_windows;
 
     // Parent implementation
     int initialize() override;
@@ -54,17 +52,17 @@ int DirectorImplSDL2::initialize()
     // TODO double initialization warning
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         cerr << "Could not initialize sdl2: " << SDL_GetError() << endl;
-        return ERROR_UNKNOWN;
+        return RETURN_ERROR_UNKNOWN;
     }
 
-    return ERROR_SUCCESS;
+    return RETURN_SUCCESS;
 }
 
 int DirectorImplSDL2::finalize()
 {
     readyToFinish.store(true);
 
-    return ERROR_SUCCESS;
+    return RETURN_SUCCESS;
 }
 
 int DirectorImplSDL2::run()
@@ -84,32 +82,28 @@ int DirectorImplSDL2::run()
 
     cleanup();
 
-    return ERROR_SUCCESS;
+    return RETURN_SUCCESS;
 }
 
 // Implementation class functions
 int DirectorImplSDL2::cleanup()
 {
     m_windows.clear();
+    setActiveWindow(std::string());
 
     SDL_Quit();
 
-    return ERROR_SUCCESS;
+    return RETURN_SUCCESS;
 }
 
 int DirectorImplSDL2::draw()
 {
-    std::shared_ptr<Window> activeWindowPtr = activeWindow();
+    Window *activeWindowPtr = activeWindow();
 
-    WindowSDL2 *window = nullptr;
     if (activeWindowPtr) {
-        window = dynamic_cast<WindowSDL2 *>(activeWindowPtr.get());
-    }
-
-    if (window) {
-        return window->draw();
+        return activeWindowPtr->draw();
     } else {
-        return ERROR_UNKNOWN;
+        return RETURN_ERROR_UNKNOWN;
     }
 }
 
@@ -135,7 +129,7 @@ int DirectorImplSDL2::eventHandler()
         }
     }
 
-    return ERROR_SUCCESS;
+    return RETURN_SUCCESS;
 }
 
 } // namespace AG

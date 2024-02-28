@@ -17,8 +17,20 @@ set(SOURCES
     backends/SDL2/FactoryImplSDL2.cpp
     backends/SDL2/WindowSDL2.cpp
     backends/SDL2/SceneSDL2.cpp
-    )
+)
 
-add_library(${TARGET} SHARED ${SOURCES})
+set(HEADERS
+    api/Director.h
+    api/Factory.h
+    api/Window.h
+    api/Scene.h
+    api/DirectorImpl.h
+    backends/SDL2/DirectorSDL2.h
+    backends/SDL2/FactoryImplSDL2.h
+    backends/SDL2/WindowSDL2.h
+    backends/SDL2/SceneSDL2.h
+)
+
+add_library(${TARGET} SHARED ${SOURCES} ${HEADERS})
 
 target_include_directories(${TARGET} PUBLIC api)

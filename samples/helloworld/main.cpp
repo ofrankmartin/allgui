@@ -1,3 +1,4 @@
+#include <csignal>
 #include <iostream>
 #include <memory>
 
@@ -19,7 +20,8 @@ int main(int argc, char **argv)
     director->initialize();
 
     Window *mainWindow = factory.createWindow();
-    if (mainWindow && director->addWindow("main", mainWindow) == ERROR_SUCCESS) {
+    if (mainWindow &&
+        director->addWindow("main", mainWindow) == RETURN_SUCCESS) {
         director->activeWindow()->initialize("Hello AllGUI world!", 800, 600);
         director->run();
         return EXIT_SUCCESS;

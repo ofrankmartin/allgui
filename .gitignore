@@ -38,5 +38,6 @@
 *.user
 
 # build directories
-build
-build_*
+build/
+build_*/
+build-*/

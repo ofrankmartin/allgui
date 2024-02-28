@@ -23,7 +23,7 @@ int Director::addEventListener(const string &trigger, EventCallback callback)
     return pimpl->addEventListener(trigger, callback);
 }
 
-Window *Director::activeWindow() const { return pimpl->activeWindow().get(); }
+Window *Director::activeWindow() const { return pimpl->activeWindow(); }
 
 int Director::addWindow(const std::string &idx, Window *const window)
 {

@@ -3,10 +3,10 @@
 
 namespace AG {
 
-typedef enum ErrorType_s {
-    ERROR_SUCCESS = 0x00,
-    ERROR_UNKNOWN = 0x01,
-} ErrorType;
+typedef enum ReturnCode_s {
+    RETURN_SUCCESS = 0x00,
+    RETURN_ERROR_UNKNOWN = 0x01,
+} ReturnCode;
 
 }
 
