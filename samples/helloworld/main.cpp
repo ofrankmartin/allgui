@@ -16,8 +16,12 @@ int main(int argc, char **argv)
     (void)argv;
 
     Factory factory("SDL2");
-    shared_ptr<Director> director = factory.getDirector();
-    director->initialize();
+    Director *director = factory.getDirector();
+    try {
+        director->initialize();
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << '\n';
+    }
 
     Window *mainWindow = factory.createWindow();
     if (mainWindow &&

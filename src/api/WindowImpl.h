@@ -1,5 +1,4 @@
-#ifndef __WINDOWIMPL_H__
-#define __WINDOWIMPL_H__
+#pragma once
 
 #include <string>
 
@@ -25,5 +24,3 @@ public:
 };
 
 } // namespace AG
-
-#endif // __WINDOWIMPL_H__

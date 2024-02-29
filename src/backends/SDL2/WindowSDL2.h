@@ -1,5 +1,4 @@
-#ifndef __WINDOWSDL2_H__
-#define __WINDOWSDL2_H__
+#pragma once
 
 #include <Window.h>
 
@@ -16,5 +15,3 @@ public:
 };
 
 } // namespace AG
-
-#endif // __WINDOWSDL2_H__

@@ -1,5 +1,4 @@
-#ifndef __DIRECTORIMPL_H__
-#define __DIRECTORIMPL_H__
+#pragma once
 
 #include <list>
 #include <memory>
@@ -18,7 +17,7 @@ public:
     virtual ~DirectorImpl();
 
     // Parent implementation
-    virtual int initialize() = 0;
+    virtual void initialize() = 0;
     virtual int finalize() = 0;
     virtual int run() = 0;
 
@@ -32,9 +31,7 @@ public:
 protected:
     std::unordered_map<std::string, std::list<EventCallback>> m_eventListeners;
     std::unordered_map<std::string, std::unique_ptr<Window>> m_windows;
-    Window* m_activeWindow;
+    Window *m_activeWindow;
 };
 
 } // namespace AG
-
-#endif // __DIRECTORIMPL_H__

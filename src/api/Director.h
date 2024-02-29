@@ -1,5 +1,4 @@
-#ifndef __DIRECTOR_H__
-#define __DIRECTOR_H__
+#pragma once
 
 #include <list>
 #include <memory>
@@ -18,7 +17,7 @@ public:
     Director();
     virtual ~Director();
 
-    int initialize();
+    void initialize();
     int finalize();
     int run();
 
@@ -35,5 +34,3 @@ protected:
 };
 
 } // namespace AG
-
-#endif // __DIRECTOR_H__

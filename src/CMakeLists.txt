@@ -4,13 +4,13 @@ set(TARGET "allgui")
 
 project(${TARGET} CXX)
 
-set(SOURCES 
+set(SOURCES
     # Interfaces
     api/Director.cpp
     api/Factory.cpp
     api/Window.cpp
     api/Scene.cpp
-    # Impementation interfaces
+    # Implementation interfaces
     api/DirectorImpl.cpp
     # SDL2 Backend
     backends/SDL2/DirectorSDL2.cpp
@@ -20,11 +20,16 @@ set(SOURCES
 )
 
 set(HEADERS
+    # Tools
+    api/Exception.h 
+    # Interfaces
     api/Director.h
     api/Factory.h
     api/Window.h
     api/Scene.h
+    # Implementation interfaces
     api/DirectorImpl.h
+    # SDL2 Backend
     backends/SDL2/DirectorSDL2.h
     backends/SDL2/FactoryImplSDL2.h
     backends/SDL2/WindowSDL2.h

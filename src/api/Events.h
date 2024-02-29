@@ -1,10 +1,7 @@
-#ifndef __EVENTS_H__
-#define __EVENTS_H__
+#pragma once
 
 namespace AG {
 
-    typedef void (*EventCallback)(void);
+typedef void (*EventCallback)(void);
 
 } // namespace AG
-
-#endif /* __EVENTS_H__ */

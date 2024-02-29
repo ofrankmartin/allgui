@@ -1,5 +1,4 @@
-#ifndef __FACTORY_H__
-#define __FACTORY_H__
+#pragma once
 
 #include <memory>
 #include <string>
@@ -15,12 +14,10 @@ public:
     Factory(const std::string &backend);
     ~Factory();
 
-    std::shared_ptr<Director> getDirector();
-    Window* createWindow();
+    Director *getDirector();
+    Window *createWindow();
 
 private:
     std::unique_ptr<FactoryImpl> pimpl;
 };
 } // namespace AG
-
-#endif // __FACTORY_H__

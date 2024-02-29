@@ -1,5 +1,4 @@
-#ifndef __SCENESDL2_H__
-#define __SCENESDL2_H__
+#pragma once
 
 #include <Scene.h>
 
@@ -12,5 +11,3 @@ public:
 };
 
 } // namespace AG
-
-#endif // __SCENESDL2_H__

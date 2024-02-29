@@ -10,7 +10,6 @@ namespace AG {
 using std::cerr;
 using std::cout;
 using std::endl;
-using std::shared_ptr;
 using std::string;
 
 Factory::Factory(const string &backend)
@@ -24,7 +23,7 @@ Factory::Factory(const string &backend)
 
 Factory::~Factory() {}
 
-shared_ptr<Director> Factory::getDirector() { return pimpl->getDirector(); }
-Window* Factory::createWindow() { return pimpl->createWindow(); }
+Director *Factory::getDirector() { return pimpl->getDirector(); }
+Window *Factory::createWindow() { return pimpl->createWindow(); }
 
 } // namespace AG

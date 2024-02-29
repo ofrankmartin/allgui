@@ -24,10 +24,7 @@ int DirectorImpl::addEventListener(const std::string &trigger,
     return RETURN_SUCCESS;
 }
 
-Window *DirectorImpl::activeWindow() const
-{
-    return m_activeWindow;
-}
+Window *DirectorImpl::activeWindow() const { return m_activeWindow; }
 
 int DirectorImpl::addWindow(const std::string &idx, Window *const window)
 {

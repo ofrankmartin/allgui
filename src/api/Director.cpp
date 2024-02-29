@@ -12,7 +12,7 @@ Director::Director() {}
 
 Director::~Director() {}
 
-int Director::initialize() { return pimpl->initialize(); }
+void Director::initialize() { pimpl->initialize(); }
 
 int Director::finalize() { return pimpl->finalize(); }
 

@@ -1,5 +1,4 @@
-#ifndef __SCENEIMPL_H__
-#define __SCENEIMPL_H__
+#pragma once
 
 #include <memory>
 
@@ -12,8 +11,6 @@ public:
     SceneImpl() {}
     virtual ~SceneImpl() {}
 
-    std::shared_ptr<Window> m_parentWindow;
+    Window *m_parentWindow;
 };
 } // namespace AG
-
-#endif // __SCENEIMPL_H__

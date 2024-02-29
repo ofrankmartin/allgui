@@ -4,18 +4,23 @@
 #include "WindowSDL2.h"
 
 namespace AG {
-std::shared_ptr<Director> FactoryImplSDL2::getDirector()
+
+FactoryImplSDL2::FactoryImplSDL2() {}
+
+FactoryImplSDL2::~FactoryImplSDL2() {}
+
+Director *FactoryImplSDL2::getDirector()
 {
     if (!m_director) {
         m_director.reset(new DirectorSDL2());
     }
 
-    return m_director;
+    return m_director.get();
 }
 
-Window* FactoryImplSDL2::createWindow()
+Window *FactoryImplSDL2::createWindow()
 {
-    WindowSDL2* window = new WindowSDL2();
+    WindowSDL2 *window = new WindowSDL2();
     return window;
 }
 

@@ -8,12 +8,9 @@ Scene::Scene() {}
 
 Scene::~Scene() {}
 
-std::shared_ptr<Window> Scene::parentWindow() const
-{
-    return pimpl->m_parentWindow;
-}
+Window *Scene::parentWindow() const { return pimpl->m_parentWindow; }
 
-void Scene::setParentWindow(std::shared_ptr<Window> &window)
+void Scene::setParentWindow(Window *const window)
 {
     if (pimpl->m_parentWindow != window) {
         pimpl->m_parentWindow = window;

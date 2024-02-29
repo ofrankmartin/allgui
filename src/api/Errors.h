@@ -1,5 +1,4 @@
-#ifndef __ERRORS_H__
-#define __ERRORS_H__
+#pragma once
 
 namespace AG {
 
@@ -9,5 +8,3 @@ typedef enum ReturnCode_s {
 } ReturnCode;
 
 }
-
-#endif // __ERRORS_H__

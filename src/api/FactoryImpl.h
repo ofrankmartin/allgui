@@ -1,5 +1,4 @@
-#ifndef __SUBFACTORY_H__
-#define __SUBFACTORY_H__
+#pragma once
 
 #include <memory>
 
@@ -13,9 +12,7 @@ public:
     FactoryImpl(){};
     virtual ~FactoryImpl(){};
 
-    virtual std::shared_ptr<Director> getDirector() = 0;
-    virtual Window* createWindow() = 0;
+    virtual Director *getDirector() = 0;
+    virtual Window *createWindow() = 0;
 };
 } // namespace AG
-
-#endif // __SUBFACTORY_H__

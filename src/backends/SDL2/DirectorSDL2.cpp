@@ -9,6 +9,7 @@
 #include <SDL2/SDL.h>
 
 #include <Errors.h>
+#include <Exception.h>
 #include <DirectorImpl.h>
 
 #include "WindowSDL2.h"
@@ -20,7 +21,6 @@ using std::cerr;
 using std::cout;
 using std::endl;
 using std::list;
-using std::shared_ptr;
 using std::string;
 using std::unique_ptr;
 using std::unordered_map;
@@ -32,7 +32,7 @@ public:
     atomic<bool> readyToFinish;
 
     // Parent implementation
-    int initialize() override;
+    void initialize() override;
     int finalize() override;
     int run() override;
 
@@ -47,15 +47,19 @@ DirectorSDL2::DirectorSDL2() : Director() { pimpl.reset(new DirectorImplSDL2); }
 DirectorSDL2::~DirectorSDL2() {}
 
 // Implementation class
-int DirectorImplSDL2::initialize()
+void DirectorImplSDL2::initialize()
 {
-    // TODO double initialization warning
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        cerr << "Could not initialize sdl2: " << SDL_GetError() << endl;
-        return RETURN_ERROR_UNKNOWN;
+    uint32_t wasVideoInit = SDL_WasInit(SDL_INIT_VIDEO);
+    if ((wasVideoInit & SDL_INIT_VIDEO) == SDL_INIT_VIDEO) {
+        throw Exception(Exception::Severity::Warning,
+                        "SDL video subsystem already initialized");
     }
 
-    return RETURN_SUCCESS;
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        string errorMsg =
+            string("Could not initialize sdl2: ") + SDL_GetError();
+        throw Exception(Exception::Severity::Warning, errorMsg);
+    }
 }
 
 int DirectorImplSDL2::finalize()
